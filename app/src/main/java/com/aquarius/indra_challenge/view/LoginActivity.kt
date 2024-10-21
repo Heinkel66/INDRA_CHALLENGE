@@ -9,11 +9,17 @@ import androidx.lifecycle.ViewModelProvider
 import com.aquarius.indra_challenge.data.AppDatabase
 import com.aquarius.indra_challenge.databinding.ActivityLoginBinding
 import com.aquarius.indra_challenge.repository.UserRepository
+import com.aquarius.indra_challenge.util.LoadingDialog
 import com.aquarius.indra_challenge.viewmodel.LoginViewModel
 import com.aquarius.indra_challenge.viewmodel.ViewModelFactory
 
+/**
+ * Creado por: Rodrigo Chávez (heinkel.66@gmail.com)
+ * Fecha de creación: 21 de octubre del 2024
+ */
 class LoginActivity : AppCompatActivity() {
 
+    private lateinit var loadingDialog: LoadingDialog
     private lateinit var viewModel: LoginViewModel
 
     private lateinit var binding: ActivityLoginBinding
@@ -30,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         viewModel.loginSucess.observe(this) { success ->
-            binding.animationView.visibility = View.GONE
+            loadingDialog.dismiss()
 
             if (success) {
                 val intent = Intent(this, MovieActivity::class.java)
@@ -43,10 +49,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+        loadingDialog = LoadingDialog(this)
+
         binding.buttonLogin.setOnClickListener {
             val username = binding.editTextUsername.text.toString()
             val password = binding.editTextPassword.text.toString()
-            binding.animationView.visibility = View.VISIBLE
+            loadingDialog.show()
             viewModel.authenticate(username, password)
         }
     }

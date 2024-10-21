@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:hint="Usuario"
             android:inputType="text"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="@color/black" />
 
         <EditText
             android:id="@+id/editTextPassword"
@@ -29,29 +30,20 @@
             android:layout_height="wrap_content"
             android:hint="Contraseña"
             android:inputType="textPassword"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:text="INICIAR SESIÓN" />
+            android:backgroundTint="@color/yellow"
+            android:text="INICIAR SESIÓN"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
     </LinearLayout>
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/animation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

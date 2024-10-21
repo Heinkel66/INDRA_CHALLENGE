@@ -1,16 +1,17 @@
 plugins {
+    id("kotlin-kapt")
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
 
 android {
     namespace = "com.aquarius.indra_challenge"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.aquarius.indra_challenge"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -49,6 +50,8 @@ dependencies {
 
     // Room para almacenamiento local
     implementation("androidx.room:room-runtime:2.6.1")
+    implementation ("androidx.room:room-ktx:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
 
     // Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.3")
@@ -56,6 +59,7 @@ dependencies {
 
     // Glide para cargar imágenes
     implementation("com.github.bumptech.glide:glide:4.15.1")
+    kapt ("com.github.bumptech.glide:compiler:4.15.1")
 
     // SweetAlert para animaciones y notificaciones
     implementation("com.github.f0ris.sweetalert:library:1.5.1")

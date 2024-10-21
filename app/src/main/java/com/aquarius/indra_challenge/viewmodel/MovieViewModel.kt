@@ -1,6 +1,7 @@
 package com.aquarius.indra_challenge.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aquarius.indra_challenge.data.MovieEntity
@@ -11,19 +12,42 @@ import java.lang.Exception
 
 class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
 
+    private var currentPage = 1
     val movies: LiveData<List<MovieEntity>> = repository.movies
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> get() = _error
 
     init {
-        fetchMovies(1, Constants.API_KEY)
+        fetchMovies()
     }
 
-    fun fetchMovies(page: Int, apiKey: String) {
+    private fun fetchMovies() {
         viewModelScope.launch {
             try {
-                repository.fetchMovies(page, apiKey)
+                repository.fetchMovies(currentPage, Constants.API_KEY)
             } catch (e: Exception) {
-                e.printStackTrace()
+                println(e.localizedMessage)
+                _error.postValue(e.localizedMessage)
             }
         }
+    }
+
+    fun nextPage() {
+        currentPage++
+        fetchMovies()
+    }
+
+    fun previousPage() {
+        if (currentPage > 1) {
+            currentPage--
+            fetchMovies()
+        } else {
+            println("Ya estás en la primera página")
+            fetchMovies()
+        }
+    }
+
+    fun clearError() {
+        _error.value = null
     }
 }
