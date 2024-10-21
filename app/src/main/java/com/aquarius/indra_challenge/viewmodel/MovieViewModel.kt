@@ -17,17 +17,23 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> get() = _error
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     init {
         fetchMovies()
     }
 
     private fun fetchMovies() {
         viewModelScope.launch {
+            // Iniciar el estado de carga
+            _isLoading.postValue(true)
             try {
                 repository.fetchMovies(currentPage, Constants.API_KEY)
             } catch (e: Exception) {
-                println(e.localizedMessage)
                 _error.postValue(e.localizedMessage)
+            } finally {
+                _isLoading.postValue(false)
             }
         }
     }

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Indra Movie Challenge</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="app_author">Creado Por: Rodrigo Chávez (heinkel.66@gmail.com)</string>
 </resources>

@@ -36,8 +36,6 @@ class MovieActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
 
         viewModel.movies.observe(this) { movieList ->
-            loadingDialog.dismiss()
-
             if (movieList != null) {
                 adapter = MovieAdapter(movieList)
                 binding.recyclerViewMovies.adapter = adapter
@@ -47,8 +45,16 @@ class MovieActivity : AppCompatActivity() {
             }
         }
 
+        // Observar el estado de carga
+        viewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                loadingDialog.show()
+            } else {
+                loadingDialog.dismiss()
+            }
+        }
+
         viewModel.error.observe(this) { error ->
-            loadingDialog.dismiss()
             error?.let {
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
                 viewModel.clearError()
@@ -64,12 +70,10 @@ class MovieActivity : AppCompatActivity() {
         binding.recyclerViewMovies.layoutManager = LinearLayoutManager(this)
 
         binding.buttonNext.setOnClickListener {
-            loadingDialog.show()
             viewModel.nextPage()
         }
 
         binding.buttonPrevious.setOnClickListener {
-            loadingDialog.show()
             viewModel.previousPage()
         }
     }
