@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [MovieEntity::class, UserEntity::class], version = 1)
+@Database(entities = [MovieEntity::class, UserEntity::class, HeaderEntity::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun movieDao(): MovieDao
+    abstract fun headerDao(): HeaderDao
 
     companion object {
         // Volatile asegura que las actualizaciones sean visibles a todos los hilos

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aquarius.indra_challenge.data.AppDatabase
 import com.aquarius.indra_challenge.databinding.ActivityMovieBinding
+import com.aquarius.indra_challenge.repository.HeaderRepository
 import com.aquarius.indra_challenge.repository.MovieRepository
 import com.aquarius.indra_challenge.service.RetrofitInstance
 import com.aquarius.indra_challenge.util.Constants
@@ -30,8 +31,11 @@ class MovieActivity : AppCompatActivity() {
         initView()
 
         val movieDao = AppDatabase.getDatabase(application).movieDao()
-        val movieRepository = MovieRepository(RetrofitInstance.api, movieDao)
-        val factory = ViewModelFactory(null, movieRepository)
+        val headerDao = AppDatabase.getDatabase(application).headerDao()
+        val movieRepository = MovieRepository(RetrofitInstance.api, movieDao, headerDao)
+        val headerRepository = HeaderRepository(headerDao)
+
+        val factory = ViewModelFactory(null, movieRepository, headerRepository)
 
         viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
 
@@ -42,6 +46,14 @@ class MovieActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "No se pudieron cargar las películas", Toast.LENGTH_SHORT)
                     .show()
+            }
+        }
+
+        viewModel.header.observe(this) { header ->
+            if (header != null) {
+                binding.tvPaginas.text = "${header.page}/${header.total_pages}"
+                binding.tvItems.text =
+                    "${header.total_results_per_page * header.page}/${header.total_results}"
             }
         }
 
@@ -59,6 +71,10 @@ class MovieActivity : AppCompatActivity() {
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
                 viewModel.clearError()
             }
+        }
+
+        viewModel.isNextPageEnabled.observe(this) { isEnabled ->
+            binding.buttonNext.isEnabled = isEnabled
         }
     }
 

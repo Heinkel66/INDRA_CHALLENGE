@@ -32,7 +32,10 @@ class LoginActivity : AppCompatActivity() {
         val userDao = AppDatabase.getDatabase(application).userDao()
         val repository = UserRepository(userDao)
         viewModel =
-            ViewModelProvider(this, ViewModelFactory(repository, null))[LoginViewModel::class.java]
+            ViewModelProvider(
+                this,
+                ViewModelFactory(repository, null, null)
+            )[LoginViewModel::class.java]
 
 
         viewModel.loginSucess.observe(this) { success ->
